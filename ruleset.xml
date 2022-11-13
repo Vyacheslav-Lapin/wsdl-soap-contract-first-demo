@@ -11,14 +11,14 @@
     <rule groupId="org.springframework.cloud"
           artifactId="spring-cloud-starter-parent" comparisonMethod="maven">
       <ignoreVersions>
-        <ignoreVersion type="regex">1.0.\d.[\w\d]+</ignoreVersion>
+        <ignoreVersion type="regex">1.0.\d.\w+</ignoreVersion>
       </ignoreVersions>
     </rule>
 
     <rule groupId="org.codehaus.mojo"
           artifactId="sonar-maven-plugin" comparisonMethod="maven">
       <ignoreVersions>
-        <ignoreVersion type="regex">3.*</ignoreVersion>
+        <ignoreVersion type="regex">[34].*</ignoreVersion>
       </ignoreVersions>
     </rule>
 

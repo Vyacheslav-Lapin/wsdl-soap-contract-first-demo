@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.2</version>
+    <version>2.7.5</version>
     <relativePath/>
     <!-- lookup parent from repository -->
   </parent>
@@ -16,24 +15,26 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <java.version>16</java.version>
-    <spring-boot.version>2.5.2</spring-boot.version>
-    <minimal.maven.version>3.6.3</minimal.maven.version>
+    <java.version>17</java.version>
+    <spring-boot.version>2.7.5</spring-boot.version>
+    <minimal.maven.version>3.8.6</minimal.maven.version>
 
-    <checker.version>3.15.0</checker.version>
-    <annotations.version>21.0.1</annotations.version>
+    <checker.version>3.27.0</checker.version>
+    <annotations.version>23.0.0</annotations.version>
     <jcip-annotations.version>1.0</jcip-annotations.version>
-    <spotbugs.version>4.3.0</spotbugs.version>
-    <error_prone_annotations.version>2.7.1</error_prone_annotations.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
+    <error_prone_annotations.version>2.16</error_prone_annotations.version>
 
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
-    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
-    <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
-    <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
+
+    <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+    <versions-maven-plugin.version>2.13.0</versions-maven-plugin.version>
+    <maven-enforcer-plugin.version>3.1.0</maven-enforcer-plugin.version>
     <lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version>
-    <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-    <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
+    <properties-maven-plugin.version>1.1.0</properties-maven-plugin.version>
+    <maven-jaxb2-plugin.version>0.15.1</maven-jaxb2-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -98,11 +99,7 @@
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
@@ -112,7 +109,15 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -152,9 +157,7 @@
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <compilerArgs>
-              <!--<arg>-parameters</arg>-->
-              <arg>--enable-preview</arg>
-              <!--<arg>-Xplugin:Manifold</arg>-->
+              <arg>--enable-preview</arg><!--maven.compiler.enablePreview-->
               <!--<arg>-Xlint:preview</arg>-->
               <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
               <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
@@ -182,8 +185,8 @@
             <annotationProcessors>
               <annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
               <annotationProcessor>lombok.launch.AnnotationProcessorHider$ClaimingProcessor</annotationProcessor>
-              <annotationProcessor>&#xA;
-                org.springframework.boot.configurationprocessor.ConfigurationMetadataAnnotationProcessor&#xA;
+              <annotationProcessor>
+                org.springframework.boot.configurationprocessor.ConfigurationMetadataAnnotationProcessor
               </annotationProcessor>
             </annotationProcessors>
           </configuration>
@@ -195,16 +198,7 @@
             <argLine>--enable-preview</argLine>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>versions-maven-plugin</artifactId>
-          <version>${versions-maven-plugin.version}</version>
-          <configuration>
-            <generateBackupPoms>false</generateBackupPoms>
-            <!--suppress MavenModelInspection -->
-            <rulesUri>file://${maven.multiModuleProjectDirectory}/ruleset.xml</rulesUri>
-          </configuration>
-        </plugin>
+
         <plugin>
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>${maven-enforcer-plugin.version}</version>
@@ -223,6 +217,16 @@
               </configuration>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${versions-maven-plugin.version}</version>
+          <configuration>
+            <generateBackupPoms>false</generateBackupPoms>
+            <!--suppress MavenModelInspection -->
+            <rulesUri>file://${maven.multiModuleProjectDirectory}/ruleset.xml</rulesUri>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.projectlombok</groupId>
@@ -288,26 +292,23 @@
             <schemaIncludes>*.wsdl</schemaIncludes>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${spring-boot.version}</version>
+          <configuration>
+            <excludes>
+              <exclude>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+              </exclude>
+            </excludes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>
-              <groupId>org.projectlombok</groupId>
-              <artifactId>lombok</artifactId>
-            </exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-      </plugin>
       <plugin>
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
@@ -317,12 +318,23 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
         <artifactId>properties-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.jvnet.jaxb2.maven2</groupId>
         <artifactId>maven-jaxb2-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
     </plugins>
   </build>
+
+  <modelVersion>4.0.0</modelVersion>
+
 </project>
